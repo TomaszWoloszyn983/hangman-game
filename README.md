@@ -1,13 +1,14 @@
-#Welcome to the Hangman Game
+# Welcome to the Hangman Game
 
-##Project Content
+## Project Content
 - Program.cs
-- Game.cs
-- Questions\
+- Models/
 - |- MovieTitles
-- Player\
-- |- Player class
-- gameStatistics\
-- |- GameStatistics class
+- |- Player.cs class
+- Services/
+- |- GameLogic.cs
+- |- GameStatistics.cs class
+- UI/
+- |- HangmanPrint
 
 

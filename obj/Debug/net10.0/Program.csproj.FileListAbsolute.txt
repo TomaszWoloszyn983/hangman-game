@@ -12,3 +12,4 @@ C:\Users\tomas\Desktop\ATU - Contemporary Software Developer course\Hangman Game
 C:\Users\tomas\Desktop\ATU - Contemporary Software Developer course\Hangman Game\Program\Program\obj\Debug\net10.0\Program.pdb
 C:\Users\tomas\Desktop\ATU - Contemporary Software Developer course\Hangman Game\Program\Program\obj\Debug\net10.0\Program.genruntimeconfig.cache
 C:\Users\tomas\Desktop\ATU - Contemporary Software Developer course\Hangman Game\Program\Program\obj\Debug\net10.0\ref\Program.dll
+C:\Users\tomas\Desktop\ATU - Contemporary Software Developer course\Hangman Game\Program\Program\obj\Debug\net10.0\Program.sourcelink.json

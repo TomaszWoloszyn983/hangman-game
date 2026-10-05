@@ -1,12 +1,7 @@
-﻿Console.WriteLine("\tHello!\nWelcome to the Hangman Game!\n\nPlease enter your name: ");
+﻿class Program{
+    static void Main(string[] args){
 
-string playerName = null;
-while (playerName == null || playerName.Length == 0){
-    playerName = Console.ReadLine();
-    if (string.IsNullOrWhiteSpace(playerName))
-    {
-        Console.WriteLine("Please enter a valid name.");
-        playerName = null;
+        GameLogic gameLogic = new GameLogic();
+        gameLogic.StartGame();
     }
 }
-Console.WriteLine($"Nice to meet you, {playerName}!");

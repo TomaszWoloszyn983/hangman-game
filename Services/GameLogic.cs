@@ -4,6 +4,8 @@ class GameLogic
         Console.WriteLine("\tHello!\nWelcome to the Hangman Game!\n\nPlease enter your name: ");
 
 
+
+// ---------- Assign Player ----------------
         string playerName = null;
 
         // Loop until a valid name is entered
@@ -15,7 +17,9 @@ class GameLogic
                 playerName = null;
             }
         }
-        Console.WriteLine($"Nice to meet you, {playerName}!");
-        // Game logic implementation goes here
+        Player player = new Player(playerName);
+        Console.WriteLine($"Nice to meet you, {player.Name}!");
+
+        
     }
 }

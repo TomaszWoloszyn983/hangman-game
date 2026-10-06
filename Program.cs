@@ -2,6 +2,6 @@
     static void Main(string[] args){
 
         GameLogic gameLogic = new GameLogic();
-        gameLogic.StartGame();
+        gameLogic.InitiateGame();
     }
 }

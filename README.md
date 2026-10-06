@@ -1,14 +1,24 @@
 # Welcome to the Hangman Game
 
 ## Project Content
-- Program.cs
-- Models/
-- |- MovieTitles
-- |- Player.cs class
-- Services/
-- |- GameLogic.cs
-- |- GameStatistics.cs class
-- UI/
-- |- HangmanPrint
+
+```js
+HangmanGame/
+├── Models/
+│   ├── MovieTitles.cs
+│   └── Player.cs
+├── Services/
+│   ├── GameStatistics.cs
+│   └── GameLogic.cs
+├── UI/
+│   └── HangmanPrint.cs
+└── Program.cs
+```
+
+## Flowchart
+
+	![flowchart](hangman_diagram.jpg)
+
+
 
 

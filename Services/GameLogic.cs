@@ -1,9 +1,9 @@
 class GameLogic
 {
-    public void StartGame(){
+    public bool InitiateGame(){
+
+        Console.Clear();
         Console.WriteLine("\tHello!\nWelcome to the Hangman Game!\n\nPlease enter your name: ");
-
-
 
 // ---------- Assign Player ----------------
         string playerName = null;
@@ -17,9 +17,24 @@ class GameLogic
                 playerName = null;
             }
         }
-        Player player = new Player(playerName);
-        Console.WriteLine($"Nice to meet you, {player.Name}!");
 
-        
+        // Create a new Player object with the entered name
+        Player player = new Player(playerName);
+        Console.WriteLine($"Nice to meet you, {player.Name}!"
+                            +"\nAre You ready to play? (Y/N)");
+        string startGame = Console.ReadLine().ToLower();
+
+        if(startGame == null || startGame.StartsWith("y")){
+            Console.WriteLine("Great! Let's get started!");
+            return true;
+        } else {
+            Console.WriteLine("No worries! Come back when you're ready.");
+            return false;
+        }
     }
+
+    public void StartGame(){
+        player.MovieTitle = new MovieTitles().GetRandomTitle();
+        Console.WriteLine(player.MovieTitle);
+        
 }

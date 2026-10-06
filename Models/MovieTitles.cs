@@ -12,6 +12,7 @@ class MovieTitles{
             "Goodfellas",
             "Braveheart",
             "Avengers: Endgame",
+            "Requiem for a Dream",
             "Bourne Identity"
     };
 

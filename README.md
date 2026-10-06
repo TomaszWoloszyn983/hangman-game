@@ -17,7 +17,7 @@ HangmanGame/
 
 ## Flowchart
 
-	![flowchart](hangman_diagram.jpg)
+![flowchart](hangman_diagram.jpg)
 
 
 

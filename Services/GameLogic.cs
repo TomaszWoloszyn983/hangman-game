@@ -57,19 +57,12 @@ class GameLogic{
         return player;
     }
 
-    public char[] prepareMovieTitleForDisplay(String movieTitle){
-        char[] displayTitle = new char[movieTitle.Length];
-        titleToGuess = movieTitle;
-        for (int i = 0; i < movieTitle.Length; i++){
-            if (Char.IsLetter(movieTitle[i])){
-                displayTitle[i] = '_';
-            }else {
-                displayTitle[i] = movieTitle[i];
-            }
-        }
-        return displayTitle;
-    }
 
+
+    /**
+    * Starts a single game for the given player.
+    * for a single movie title.
+    */
     public void StartGame(Player player){
         titleToGuess = new MovieTitles().GetRandomTitle();
         List<char> guessedLetters = new List<char>();
@@ -92,11 +85,11 @@ class GameLogic{
                 continue;
             }
   
-            if (titleToGuess.Contains(letter)){
+            if (titleToGuess.ToUpper().Contains(letter.ToString().ToUpper())){
                 guessedLetters.Add(letter);
                 for (int i = 0; i < titleToGuess.Length; i++){
-                    if (titleToGuess[i] == letter){
-                        displayTitle[i] = letter;
+                    if (titleToGuess[i].ToString().ToUpper() == letter.ToString().ToUpper()){
+                        displayTitle[i] = titleToGuess[i];
                     }
                 }
             }else{
@@ -112,6 +105,19 @@ class GameLogic{
         }while (keepPlaying);
     }
 
+    public char[] prepareMovieTitleForDisplay(String movieTitle){
+        char[] displayTitle = new char[movieTitle.Length];
+        titleToGuess = movieTitle;
+        for (int i = 0; i < movieTitle.Length; i++){
+            if (Char.IsLetter(movieTitle[i])){
+                displayTitle[i] = '_';
+            }else {
+                displayTitle[i] = movieTitle[i];
+            }
+        }
+        return displayTitle;
+    }
+
     /**
     * Checks if the player has won the game.
     * If displayed title contains '_' the player has not won yet.
@@ -121,7 +127,7 @@ class GameLogic{
             return false;
         } else {
             Console.WriteLine("\tCongratulations!");
-            Console.WriteLine($"\n\tYour Won!\nYou guessed the movie title:\n\t {new string(displayTitle)}");
+            Console.WriteLine($"\n\tYour Won!\nYou guessed the movie title:\n\t {new string(titleToGuess)}");
             return true;
         }
     }

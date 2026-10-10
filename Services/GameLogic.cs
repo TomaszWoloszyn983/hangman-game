@@ -27,7 +27,7 @@ class GameLogic{
 
         if(startGame == null || startGame.StartsWith("y")){
             Console.WriteLine("Great! Let's get started!");
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             Console.Clear();
 
             Player player = AssignPlayer(playerName);
@@ -63,28 +63,68 @@ class GameLogic{
     }
 
     public void StartGame(Player player){
+        List<char> guessedLetters = new List<char>();
+        int wrongGuesses = 0;
         String movieTitle = player.MovieTitle;
         Char[] displayTitle = prepareMovieTitleForDisplay(movieTitle);
         Char letter;
         bool keepPlaying = true;
-        Console.WriteLine($"Your movie title is: {new string(displayTitle)}");
 
-        Console.WriteLine("\nEnter a letter: ");
 
+        Console.Clear();
         do{
+            Console.WriteLine($"Your movie title is: {new string(displayTitle)}");
+            Console.WriteLine("\nEnter a letter: ");
             letter = Console.ReadKey().KeyChar;
             
+            // Check if the input is a valid letter
             if (!Char.IsLetter(letter)){
                 Console.WriteLine("\nPlease enter a valid letter.");
                 continue;
-            }else{
-                Console.WriteLine("\nEnter a letter: ");
             }
-            keepPlaying = movieTitle.Contains(letter);
+  
+            if (movieTitle.Contains(letter)){
+                guessedLetters.Add(letter);
+                for (int i = 0; i < movieTitle.Length; i++){
+                    if (movieTitle[i] == letter){
+                        displayTitle[i] = letter;
+                    }
+                }
+            }else{
+                Console.Clear();
+                wrongGuesses++;
+                Console.WriteLine($"Your movie title is: {new string(displayTitle)}");
+                Console.WriteLine($"\nWrong guess! You have {6 - wrongGuesses} guesses left.");
+                Thread.Sleep(1500);
+            }
+            Console.Clear();
+            keepPlaying = !isWinner(wrongGuesses, displayTitle) && !isLooser(wrongGuesses);
+
         }while (keepPlaying);
+    }
 
+    /**
+    * Checks if the player has won the game.
+    * If displayed title contains '_' the player has not won yet.
+    */
+    public bool isWinner(int wrongGuesses, Char[] displayTitle){
+        if (new string(displayTitle).Contains('_')){
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-        // Game logic to start the game with the player
+    /**
+    * Checks if the player has lost the game.
+    * If the player has made 6 wrong guesses, the player has lost the game.
+    */
+    public bool isLooser(int wrongGuesses){
+        if (wrongGuesses >= 6){
+            return true;
+        } else {
+            return false;
+        }
     }
         
 }

@@ -9,11 +9,16 @@ class MovieTitles{
             "Inception",
             "Fight Club",
             "The Matrix",
-            "Goodfellas",
+            "Mulholland Drive",
             "Braveheart",
+            "Casablanca",
+            "Terminator",
+            "Back to the Future",
             "Avengers: Endgame",
             "Requiem for a Dream",
-            "Bourne Identity"
+            "Bourne Identity",
+            "The Silence of the Lambs",
+            "The Dark Knight"
     };
 
     public void DisplayMovieTitles(){

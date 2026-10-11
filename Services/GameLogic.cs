@@ -100,9 +100,23 @@ class GameLogic{
                 Thread.Sleep(1500);
             }
             Console.Clear();
-            keepPlaying = !isWinner(displayTitle) && !isLooser(wrongGuesses);
 
-        }while (keepPlaying);
+            /*
+            If the palyer has won the game, the nextTitle() method will be called 
+            to ask the user if they want to keep playing the game,
+            and go to the next title.
+            */
+            if(isWinner(displayTitle)){
+                Console.WriteLine("\tCongratulations!");
+                Console.WriteLine($"\n\t  Your Won!\n  You guessed the movie title:\n\t {new string(titleToGuess)}");
+                bool wannaKeepPlaying = nextTitle();
+                if (wannaKeepPlaying){
+                    StartGame(player);
+                } else {
+                    break;
+                }
+            }
+        }while (!isWinner(displayTitle) && !isLooser(wrongGuesses));
     }
 
     public char[] prepareMovieTitleForDisplay(String movieTitle){
@@ -119,6 +133,23 @@ class GameLogic{
     }
 
     /**
+    * Aks the user if they want to keep playing the game, 
+    * and go to the next title. 
+    * If the user enters 'Y' or 'y', the game will continue,
+    * otherwise it will end.
+    */
+    public bool nextTitle(){
+        Console.WriteLine("\n\nDo you want to keep playing? (Y/N)");
+        string startGame = Console.ReadLine().ToLower();
+        if(startGame == null || startGame.StartsWith("y")){
+            return true;
+        } else {
+            Console.WriteLine("\tNo worries!\n\n\t  Goodbye!");
+            return false;
+        }
+    }
+
+    /**
     * Checks if the player has won the game.
     * If displayed title contains '_' the player has not won yet.
     */
@@ -126,8 +157,6 @@ class GameLogic{
         if (new string(displayTitle).Contains('_')){
             return false;
         } else {
-            Console.WriteLine("\tCongratulations!");
-            Console.WriteLine($"\n\tYour Won!\nYou guessed the movie title:\n\t {new string(titleToGuess)}");
             return true;
         }
     }

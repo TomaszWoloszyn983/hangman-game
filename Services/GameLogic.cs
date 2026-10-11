@@ -20,7 +20,7 @@ class GameLogic{
 
         // Loop until a valid name is entered
         while (playerName == null || playerName.Length == 0){
-            playerName = Console.ReadLine();
+            playerName = GetUserInput();
             if (string.IsNullOrWhiteSpace(playerName))
             {
                 Console.WriteLine("Please enter a valid name.");
@@ -32,7 +32,7 @@ class GameLogic{
         Console.WriteLine($"Nice to meet you, {playerName}!"
                             +"\nAre You ready to play? (Y/N)");
         
-        string startGame = Console.ReadLine().ToLower();
+        string startGame = GetUserInput();
         if(startGame == null || startGame.StartsWith("y")){
             Console.WriteLine("Great! Let's get started!");
             Thread.Sleep(1000);
@@ -50,10 +50,7 @@ class GameLogic{
     * @return The player instance.
     */
     public Player AssignPlayer(String playerName){
-
         Player player = new Player(playerName);
-        // player.MovieTitle = titleToGuess; // No need to assign the movie title here, as it is already assigned in the Player constructor.
-        // Console.WriteLine(player.MovieTitle);
         return player;
     }
 
@@ -70,13 +67,12 @@ class GameLogic{
         // String movieTitle = player.MovieTitle;
         Char[] displayTitle = prepareMovieTitleForDisplay(titleToGuess);
         Char letter;
-        bool keepPlaying = true;
 
 
         Console.Clear();
         do{
-            Console.WriteLine($"Your movie title is: {new string(displayTitle)}");
-            Console.WriteLine("\nEnter a letter: ");
+            Console.WriteLine($"Your movie title is: {new string(displayTitle)}"
+                                +"\nEnter a letter: ");
             letter = Console.ReadKey().KeyChar;
             
             // Check if the input is a valid letter
@@ -107,18 +103,34 @@ class GameLogic{
             and go to the next title.
             */
             if(isWinner(displayTitle)){
-                Console.WriteLine("\tCongratulations!");
-                Console.WriteLine($"\n\t  Your Won!\n  You guessed the movie title:\n\t {new string(titleToGuess)}");
+                player.UpdateScore(1);
+                player.GuessedTitles.Add(titleToGuess);
+                Thread.Sleep(500);
+                Console.Clear();
+                Console.WriteLine("\tCongratulations!"
+                                    +"\n\n\t  Your Won!"
+                                    +"\n  You guessed the movie title:"
+                                    +$"\n\t {new string(titleToGuess)}"
+                                    +$"\n\n\tYour Score: {player.Score}");
                 bool wannaKeepPlaying = nextTitle();
                 if (wannaKeepPlaying){
                     StartGame(player);
                 } else {
+                    Console.Clear();
+                    Console.WriteLine("\n\nThanks for playing!"
+                                        +$"\nYour final score is: {player.Score}"
+                                        +$"\nYou guessed the following titles: {string.Join(", ", player.GuessedTitles)}"
+                                        +"\n\nGoodbye!");
                     break;
                 }
             }
         }while (!isWinner(displayTitle) && !isLooser(wrongGuesses));
     }
 
+    /**
+    * Prepares the movie title for display by replacing letters
+    * with underscores.   
+    */
     public char[] prepareMovieTitleForDisplay(String movieTitle){
         char[] displayTitle = new char[movieTitle.Length];
         titleToGuess = movieTitle;
@@ -140,11 +152,10 @@ class GameLogic{
     */
     public bool nextTitle(){
         Console.WriteLine("\n\nDo you want to keep playing? (Y/N)");
-        string startGame = Console.ReadLine().ToLower();
+        string startGame = GetUserInput();
         if(startGame == null || startGame.StartsWith("y")){
             return true;
         } else {
-            Console.WriteLine("\tNo worries!\n\n\t  Goodbye!");
             return false;
         }
     }
@@ -154,11 +165,10 @@ class GameLogic{
     * If displayed title contains '_' the player has not won yet.
     */
     public bool isWinner(Char[] displayTitle){
-        if (new string(displayTitle).Contains('_')){
+        if (new string(displayTitle).Contains('_'))
             return false;
-        } else {
+        else 
             return true;
-        }
     }
 
     /**
@@ -167,13 +177,23 @@ class GameLogic{
     */
     public bool isLooser(int wrongGuesses){
         if (wrongGuesses >= 6){
-            Console.WriteLine("\tGame Over!");
-            Console.WriteLine($"\n\tYour Lost!");
-            Console.WriteLine($"\nThe movie title was: {titleToGuess}");
+            Console.WriteLine("\tGame Over!"
+                            +"\n\tYour Lost!"
+                            +$"\nThe movie title was: {titleToGuess}");
             return true;
         } else {
             return false;
         }
+    }
+
+    public string GetUserInput(){
+        Console.WriteLine("Enter a letter: ");
+        string input = Console.ReadLine().ToLower();
+        while(input != null && input != "y" && input != "n" && input.Length != 1){
+            Console.WriteLine("Please enter a valid letter.");
+            input = Console.ReadLine().ToLower();
+        }
+        return input;
     }
         
 }

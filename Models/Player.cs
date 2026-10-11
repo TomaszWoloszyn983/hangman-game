@@ -4,34 +4,34 @@ public class Player
     public int Score { get; set; }
     public bool IsWon { get; set; }
 
-    public List<String> GuessedTitles { get; set;} = new List<String> {};
+    public List<String> GuessedTitles { get; private set;}
 
     /**
         Assigned it automatically as the object is created.
     */
     public string MovieTitle { get; set; }
 
-    public Player(string name)
-    {
+    public Player(string name){
         Name = name;
         Score = 0;
         this.IsWon = false;
         MovieTitle = null;
-
+        GuessedTitles = new List<String>();
     }
 
-    public void UpdateScore(int points)
-    {
+    public void UpdateScore(int points){
         Score += points;
     }
 
-    public void ResetScore()
-    {
+    public void ResetScore(){
         Score = 0;
     }
 
-    public String GetPlayerInfo()
-    {
+    public String GetPlayerInfo(){
         return $"Player: {Name}, Score: {Score}, IsWon: {IsWon}, Guessed Titles: {string.Join(", ", GuessedTitles)}";
+    }
+
+    public void AddGuessedTitle(String title){
+        GuessedTitles.Add(title);
     }
 }

@@ -20,7 +20,7 @@ class GameLogic{
 
         // Loop until a valid name is entered
         while (playerName == null || playerName.Length == 0){
-            playerName = GetUserInput();
+            playerName = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(playerName))
             {
                 Console.WriteLine("Please enter a valid name.");
@@ -77,6 +77,7 @@ class GameLogic{
             
             // Check if the input is a valid letter
             if (!Char.IsLetter(letter)){
+                Console.Clear();
                 Console.WriteLine("\nPlease enter a valid letter.");
                 continue;
             }
@@ -153,11 +154,12 @@ class GameLogic{
     public bool nextTitle(){
         Console.WriteLine("\n\nDo you want to keep playing? (Y/N)");
         string startGame = GetUserInput();
-        if(startGame == null || startGame.StartsWith("y")){
+        if(startGame == null || startGame == "y"){
             return true;
-        } else {
+        } else if (startGame == "n"){
             return false;
         }
+        return false;
     }
 
     /**
@@ -187,10 +189,11 @@ class GameLogic{
     }
 
     public string GetUserInput(){
-        Console.WriteLine("Enter a letter: ");
+        // Console.WriteLine("\n\nDo you want to keep playing? (y/n)");
         string input = Console.ReadLine().ToLower();
-        while(input != null && input != "y" && input != "n" && input.Length != 1){
-            Console.WriteLine("Please enter a valid letter.");
+        while(input == null || input != "y" && input != "n" || input.Length != 1){
+            Console.Clear();
+            Console.WriteLine("Please enter a valid letter. (y/n)");
             input = Console.ReadLine().ToLower();
         }
         return input;

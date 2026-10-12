@@ -9,15 +9,21 @@ class MovieTitles{
             // "Inception",
             // "Fight Club",
             // "The Matrix",
-            "Mulholland Drive",
+            // "Mulholland Drive",
             // "Braveheart",
-            "Casablanca",
+            // "Casablanca",
             // "Terminator",
+            "Lego Ninjago",
+            "Ninjago Characters",
+            "Guardians of the Galaxy",
             "Back to the Future",
-            // "Avengers: Endgame",
+            "Avengers Endgame",
+            "K Pop Demon Hunters",
+            "Avengers Infinity War",
+            "Spiderman Brand New Day",
             // "Requiem for a Dream",
             // "Bourne Identity",
-            "The Silence of the Lambs",
+            // "The Silence of the Lambs",
             "The Dark Knight"
     };
 
@@ -39,7 +45,7 @@ class MovieTitles{
         return randomTitle;
     }
 
-    public int GetListCount(){
+    public int GetFilmCount(){
         return movieTitlesList.Count;
     }
 }

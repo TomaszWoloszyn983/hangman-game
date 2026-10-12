@@ -10,8 +10,9 @@ class GameLogic{
     * when a new game is started.
     */
     static string titleToGuess;
+    MovieTitles MovieTitles;
 
-    public void InitiateGame(){
+    public void StartGame(){
         Console.Clear();
         Console.WriteLine("\tHello!\nWelcome to the Hangman Game!\n\nPlease enter your name: ");
 
@@ -39,7 +40,8 @@ class GameLogic{
             Console.Clear();
 
             Player player = AssignPlayer(playerName);
-            StartGame(player);
+            MovieTitles = new MovieTitles();
+            StartRound(player);
         } else {
             Console.WriteLine("No worries!\n\nGoodbye!");
         }
@@ -57,33 +59,41 @@ class GameLogic{
 
 
     /**
-    * Starts a single game for the given player.
+    * Starts a single game for the given player
     * for a single movie title.
     */
-    public void StartGame(Player player){
-        titleToGuess = new MovieTitles().GetRandomTitle();
+    public void StartRound(Player player){
+        titleToGuess = MovieTitles.GetRandomTitle();
         List<char> guessedLetters = new List<char>();
         int wrongGuesses = 0;
-        // String movieTitle = player.MovieTitle;
+        player.IncrementTotalGames();
         Char[] displayTitle = prepareMovieTitleForDisplay(titleToGuess);
         Char letter;
 
 
         Console.Clear();
         do{
+            Console.Clear();
             Console.WriteLine($"Your movie title is: {new string(displayTitle)}"
                                 +"\nEnter a letter: ");
             letter = Console.ReadKey().KeyChar;
-            
+
             // Check if the input is a valid letter
             if (!Char.IsLetter(letter)){
                 Console.Clear();
                 Console.WriteLine("\nPlease enter a valid letter.");
+                Thread.Sleep(1000);
+                continue;
+            }else if (guessedLetters.Contains(letter)){
+                Console.Clear();
+                Console.WriteLine("You have already typed that letter. Select another.");
+                Thread.Sleep(1000);
                 continue;
             }
+            guessedLetters.Add(letter);
   
             if (titleToGuess.ToUpper().Contains(letter.ToString().ToUpper())){
-                guessedLetters.Add(letter);
+                // guessedLetters.Add(letter);
                 for (int i = 0; i < titleToGuess.Length; i++){
                     if (titleToGuess[i].ToString().ToUpper() == letter.ToString().ToUpper()){
                         displayTitle[i] = titleToGuess[i];
@@ -93,10 +103,11 @@ class GameLogic{
                 Console.Clear();
                 wrongGuesses++;
                 Console.WriteLine($"Your movie title is: {new string(displayTitle)}");
+                DisplayHangman(wrongGuesses);
                 Console.WriteLine($"\nWrong guess! You have {6 - wrongGuesses} guesses left.");
-                Thread.Sleep(1500);
+                Thread.Sleep(2000);
             }
-            Console.Clear();
+            
 
             /*
             If the palyer has won the game, the nextTitle() method will be called 
@@ -104,27 +115,60 @@ class GameLogic{
             and go to the next title.
             */
             if(isWinner(displayTitle)){
+                Thread.Sleep(500);
                 player.UpdateScore(1);
                 player.GuessedTitles.Add(titleToGuess);
-                Thread.Sleep(500);
                 Console.Clear();
                 Console.WriteLine("\tCongratulations!"
                                     +"\n\n\t  Your Won!"
                                     +"\n  You guessed the movie title:"
                                     +$"\n\t {new string(titleToGuess)}"
                                     +$"\n\n\tYour Score: {player.Score}");
-                bool wannaKeepPlaying = nextTitle();
-                if (wannaKeepPlaying){
-                    StartGame(player);
-                } else {
+                
+                if(MovieTitles.GetFilmCount() > 0 && NextTitle()){
+                    StartRound(player);
+                }else if(MovieTitles.GetFilmCount() == 0 ){
                     Console.Clear();
-                    Console.WriteLine("\n\nThanks for playing!"
-                                        +$"\nYour final score is: {player.Score}"
-                                        +$"\nYou guessed the following titles: {string.Join(", ", player.GuessedTitles)}"
-                                        +"\n\nGoodbye!");
+                    Console.WriteLine("\nThere are no more movie titles to guess!"+
+                                        "\nCongratulation! You finished the game.");
+                    Thread.Sleep(2000);
+                    DisplayStatistics(player);
+                    break;
+                }else {
+                    Thread.Sleep(1000);
+                    DisplayStatistics(player);
                     break;
                 }
             }
+
+            /**
+            If the player has lost the game, the nextTitle() method will be called 
+            to ask the user if they want to keep playing the game,  
+            */
+            if(isLooser(wrongGuesses)){
+                Thread.Sleep(600);
+                // Console.Clear();
+                Console.WriteLine("\n\n\t  You Lost!"
+                                    +"\n    The movie title was:"
+                                    +$"\n\t {new string(titleToGuess)}"
+                                    +$"\n\n\tYour Score: {player.Score}");
+
+                if(MovieTitles.GetFilmCount() > 0 && NextTitle()){
+                    StartRound(player);
+                }else if(MovieTitles.GetFilmCount() == 0 ){
+                    Console.Clear();
+                    Console.WriteLine("\nThere are no more movie titles to guess!"+
+                                        "\nCongratulation! You finished the game.");
+                    Thread.Sleep(3000);
+                    DisplayStatistics(player);
+                    break;
+                }else {
+                    Thread.Sleep(1000);
+                    DisplayStatistics(player);
+                    break;
+                }
+            }
+
         }while (!isWinner(displayTitle) && !isLooser(wrongGuesses));
     }
 
@@ -151,7 +195,7 @@ class GameLogic{
     * If the user enters 'Y' or 'y', the game will continue,
     * otherwise it will end.
     */
-    public bool nextTitle(){
+    public bool NextTitle(){
         Console.WriteLine("\n\nDo you want to keep playing? (Y/N)");
         string startGame = GetUserInput();
         if(startGame == null || startGame == "y"){
@@ -179,15 +223,15 @@ class GameLogic{
     */
     public bool isLooser(int wrongGuesses){
         if (wrongGuesses >= 6){
-            Console.WriteLine("\tGame Over!"
-                            +"\n\tYour Lost!"
-                            +$"\nThe movie title was: {titleToGuess}");
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+    * Gets the user input and validates it.
+    */
     public string GetUserInput(){
         // Console.WriteLine("\n\nDo you want to keep playing? (y/n)");
         string input = Console.ReadLine().ToLower();
@@ -199,4 +243,40 @@ class GameLogic{
         return input;
     }
         
+    /**
+    * Displays the final statistics of the player after the game ends.
+    */
+    public void DisplayStatistics(Player player){
+        Console.Clear();
+        Console.WriteLine($"\n\nThanks for playing {player.Name}!"
+                            +$"\nYour final score is: {player.Score}"
+                            +$"\nYou played a total of {player.TotalGames} games."
+                            +$"\nYou won {player.Score} games."
+                            +$"\nYou lost {player.TotalGames - player.Score} games."
+                            +$"\nYou guessed the following titles: {string.Join(",  \n", player.GuessedTitles)}"
+                            +"\n\n  Goodbye!\n\n");
+    }
+
+    /**
+    * Displays the hangman figure based on the number of wrong guesses. 
+    */
+    public void DisplayHangman(int wrongGuesses){
+       
+        //     +---+
+        //     |   |
+        //     O   |
+        //    /|\  |
+        //    / \  |
+        //   ______|
+
+        String[] HangmanParts = new String[]{" +---+", " |   |", " O   |", "/|\\  |", "/ \\  |", "_____|"};
+        String hangmanDisplay = "";
+    
+        for (int i = 0; i < wrongGuesses; i++){
+            Console.Clear();
+            hangmanDisplay += "\t   "+HangmanParts[i]+"\n";
+            Console.WriteLine(hangmanDisplay);
+            Thread.Sleep(200);
+        }
+    }
 }
